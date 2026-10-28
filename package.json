@@ -1,0 +1,33 @@
+{
+  "name": "pokemon-pack-simulator",
+  "version": "1.0.0",
+  "description": "宝可梦卡牌开包模拟器 — physically based card rendering, rigid body physics and rarity effects",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check:physics": "node scripts/physics-check.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yeloooojason/pokemon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yeloooojason/pokemon/issues"
+  },
+  "homepage": "https://github.com/yeloooojason/pokemon#readme",
+  "dependencies": {
+    "@dimforge/rapier3d-compat": "^0.14.0",
+    "@fontsource/barlow": "^5.1.0",
+    "@fontsource/barlow-condensed": "^5.1.0",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  },
+  "private": true
+}

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+	<title>宝可梦卡牌开包模拟器</title>
+	<meta name="description" content="真实物理与光照模拟的宝可梦卡牌开包模拟器：撕开卡包、翻开卡牌、甩到桌面，体验不同稀有度的闪卡光泽与特效。" />
+	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%23fff' stroke='%23111' stroke-width='5'/%3E%3Cpath d='M3 32a29 29 0 0 1 58 0z' fill='%23e53935' stroke='%23111' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23fff' stroke='%23111' stroke-width='5'/%3E%3C/svg%3E" />
+</head>
+<body>
+	<canvas id="gl"></canvas>
+
+	<div id="loading" class="loading">
+		<div class="ball"></div>
+		<div class="loading-text">正在准备牌桌…</div>
+	</div>
+
+	<header class="brand">
+		<div class="brand-title">宝可梦卡牌开包模拟器</div>
+		<div class="brand-sub" id="stats"></div>
+	</header>
+
+	<section id="menu" class="menu hidden">
+		<h2>选择扩展包</h2>
+		<div id="setList" class="set-list"></div>
+		<button id="openBtn" class="primary">开一包</button>
+		<div class="menu-row">
+			<button id="collectionBtn" class="ghost">图鉴</button>
+			<button id="clearBtn" class="ghost">清理桌面</button>
+		</div>
+		<p class="menu-note">卡牌数据：PokemonTCG 开放数据 · 立绘：PokeAPI · 光照：Poly Haven CC0 HDRI</p>
+	</section>
+
+	<div id="hint" class="hint"></div>
+
+	<div id="banner" class="banner"></div>
+
+	<div class="toolbar">
+		<button id="tearBtn" class="tool hidden">撕开</button>
+		<button id="autoBtn" class="tool hidden">自动翻牌</button>
+		<button id="dropBtn" class="tool hidden">放下卡牌</button>
+		<button id="settingsBtn" class="tool icon" title="设置">⚙</button>
+	</div>
+
+	<aside id="settings" class="panel settings hidden">
+		<h3>光照与画质</h3>
+		<label>环境光
+			<select id="envSel"></select>
+		</label>
+		<label class="row"><input type="checkbox" id="followLight" /> 光源跟随指针 <span class="kbd">L</span></label>
+		<p class="tip">也可以按住右键（或双指）拖动来移动台灯</p>
+		<label>色温 <span id="tempVal">4300K</span>
+			<input type="range" id="tempSlider" min="2200" max="7500" step="100" value="4300" />
+		</label>
+		<label>台灯亮度
+			<input type="range" id="intSlider" min="0" max="20000" step="250" value="9000" />
+		</label>
+		<label>画质
+			<select id="qualitySel">
+				<option value="low">流畅</option>
+				<option value="medium" selected>均衡</option>
+				<option value="high">极致</option>
+			</select>
+		</label>
+		<label class="row"><input type="checkbox" id="bloomChk" checked /> 泛光</label>
+		<label class="row"><input type="checkbox" id="soundChk" checked /> 音效</label>
+		<label class="row"><input type="checkbox" id="gyroChk" /> 陀螺仪倾斜（手机）</label>
+		<h3>稀有度测试</h3>
+		<label>下一包保底
+			<select id="forceSel">
+				<option value="">关闭（真实概率）</option>
+				<option value="Rare">R 稀有闪卡</option>
+				<option value="Double Rare">RR 双倍稀有</option>
+				<option value="ACE SPEC Rare">ACE SPEC</option>
+				<option value="Ultra Rare">SR 超级稀有</option>
+				<option value="Illustration Rare">AR 插画稀有</option>
+				<option value="Special Illustration Rare">SAR 特别插画稀有</option>
+				<option value="Hyper Rare">UR 金卡</option>
+			</select>
+		</label>
+		<button id="closeSettings" class="ghost">关闭</button>
+	</aside>
+
+	<section id="summary" class="panel summary hidden">
+		<h3>本包结果</h3>
+		<div id="summaryList" class="summary-list"></div>
+		<div class="menu-row">
+			<button id="againBtn" class="primary">再开一包</button>
+			<button id="backBtn" class="ghost">换系列</button>
+		</div>
+		<p class="tip">点击桌上的卡牌可以拿起来仔细查看</p>
+	</section>
+
+	<section id="collection" class="panel collection hidden">
+		<div class="collection-head">
+			<h3>图鉴</h3>
+			<select id="colSet"></select>
+			<button id="closeCollection" class="ghost">关闭</button>
+		</div>
+		<div id="colProgress" class="col-progress"></div>
+		<div id="colGrid" class="col-grid"></div>
+	</section>
+
+	<div id="toast" class="toast"></div>
+
+	<script type="module" src="/src/main.js"></script>
+</body>
+</html>
