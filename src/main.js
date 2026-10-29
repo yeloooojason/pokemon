@@ -1,15 +1,4 @@
 import * as THREE from 'three';
-import '@fontsource/barlow/500.css';
-import '@fontsource/barlow/600.css';
-import '@fontsource/barlow/700.css';
-import '@fontsource/barlow/800.css';
-import '@fontsource/barlow/900.css';
-import '@fontsource/barlow/800-italic.css';
-import '@fontsource/barlow/900-italic.css';
-import '@fontsource/barlow-condensed/500.css';
-import '@fontsource/barlow-condensed/600.css';
-import '@fontsource/barlow-condensed/700.css';
-import './style.css';
 
 import { Stage, ENVIRONMENTS } from './scene.js';
 import { Physics } from './physics.js';
@@ -194,7 +183,7 @@ class App {
 		e.tempSlider.oninput = temp; e.intSlider.oninput = inten;
 		temp(); inten();
 		e.qualitySel.value = this.quality;
-		e.qualitySel.onchange = () => this.applyQuality( e.qualitySel.value );
+		e.qualitySel.onchange = () => { st.qualityPinned = true; this.applyQuality( e.qualitySel.value ); };
 		e.bloomChk.checked = st.bloom ?? true;
 		this.stage.bloom.enabled = e.bloomChk.checked;
 		e.bloomChk.onchange = () => { this.stage.bloom.enabled = e.bloomChk.checked; st.bloom = e.bloomChk.checked; saveStore( this.store ); };
@@ -873,6 +862,26 @@ class App {
 		}
 	}
 
+	// step the quality down once if the first seconds run slowly (unless the user picked a level)
+	adaptQuality( realDt ) {
+		if ( this.store.settings.qualityPinned || this.adaptDone || document.hidden ) return;
+		const a = this.adapt ||= { t: 0, n: 0, sum: 0 };
+		a.t += realDt;
+		if ( a.t < 2 ) return;
+		a.n ++; a.sum += realDt;
+		if ( a.t < 6 ) return;
+		const fps = a.n / a.sum;
+		const order = [ 'low', 'medium', 'high' ];
+		const i = order.indexOf( this.quality );
+		if ( fps < 32 && i > 0 ) {
+			this.applyQuality( order[ i - 1 ] );
+			this.ui.el.qualitySel.value = this.quality;
+			this.ui.toast( `帧率较低（${fps.toFixed( 0 )} FPS），已自动切换到「${this.ui.el.qualitySel.selectedOptions[ 0 ].textContent}」画质`, 3500 );
+			this.adapt = null;
+			if ( i - 1 === 0 ) this.adaptDone = true;
+		} else this.adaptDone = true;
+	}
+
 	// deterministic stepping for automated tests: __app.paused = true; __app.step( frames, dt )
 	step( n = 1, dt = 1 / 60 ) {
 		for ( let i = 0; i < n; i ++ ) this.frame( dt, i === n - 1 );
@@ -884,6 +893,8 @@ class App {
 		const dt = fixedDt ?? Math.min( DT_MAX, ( now - this.last ) / 1000 );
 		this.last = now;
 		this.dtLast = dt;
+		if ( fixedDt === undefined ) this.adaptQuality( ( now - ( this.prevNow ?? now ) ) / 1000 );
+		this.prevNow = now;
 		this.time += dt;
 		const ts = this.fx.timeScale;
 		const sdt = dt * ts;

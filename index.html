@@ -6,6 +6,17 @@
 	<title>宝可梦卡牌开包模拟器</title>
 	<meta name="description" content="真实物理与光照模拟的宝可梦卡牌开包模拟器：撕开卡包、翻开卡牌、甩到桌面，体验不同稀有度的闪卡光泽与特效。" />
 	<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='29' fill='%23fff' stroke='%23111' stroke-width='5'/%3E%3Cpath d='M3 32a29 29 0 0 1 58 0z' fill='%23e53935' stroke='%23111' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23fff' stroke='%23111' stroke-width='5'/%3E%3C/svg%3E" />
+	<link rel="stylesheet" href="vendor/fonts/fonts.css" />
+	<link rel="stylesheet" href="src/style.css" />
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "./vendor/three/three.module.min.js",
+			"three/addons/": "./vendor/three/addons/",
+			"@dimforge/rapier3d-compat": "./vendor/rapier/rapier.es.js"
+		}
+	}
+	</script>
 </head>
 <body>
 	<canvas id="gl"></canvas>
@@ -103,6 +114,6 @@
 
 	<div id="toast" class="toast"></div>
 
-	<script type="module" src="/src/main.js"></script>
+	<script type="module" src="src/main.js"></script>
 </body>
 </html>

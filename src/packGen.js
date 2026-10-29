@@ -4,7 +4,7 @@ const setCache = new Map();
 
 export async function loadSet( id ) {
 	if ( setCache.has( id ) ) return setCache.get( id );
-	const res = await fetch( `${import.meta.env.BASE_URL}data/${id}.json` );
+	const res = await fetch( `./data/${id}.json` );
 	const data = await res.json();
 	const byRarity = {};
 	for ( const c of data.cards ) ( byRarity[ c.r ] ||= [] ).push( c );

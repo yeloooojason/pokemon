@@ -64,7 +64,7 @@
 - 平行于板面的摩擦阻力、二次的旋转空气阻尼；
 - 接触力事件驱动落桌的“啪”声，音量随冲击力变化。
 
-手中的卡包和卡牌由 6 自由度阻尼弹簧驱动，带惯性、过冲和回弹；松手时把指针速度换算到世界坐标，交给刚体继续运动。`npm run check:physics` 会在 Node 里跑几个下落/抛掷的数值检查。
+手中的卡包和卡牌由 6 自由度阻尼弹簧驱动，带惯性、过冲和回弹；松手时把指针速度换算到世界坐标，交给刚体继续运动。
 
 ## 卡面素材
 
@@ -77,23 +77,17 @@
 
 ## 运行
 
-```bash
-npm install
-```
+纯静态网站，无需构建、无需 npm。依赖（Three.js r170、Rapier 0.14、Barlow 字体）已放在 `vendor/`，通过 import map 加载。
+
+ES 模块不能从 `file://` 直接打开，用任意静态服务器在仓库根目录启动即可，例如：
 
 ```bash
-npm run dev
+python3 -m http.server 8080
 ```
 
-然后打开终端里显示的地址（默认 http://localhost:5173）。需要支持 WebGL2 的浏览器；独立显卡上建议选择“极致”画质。
+然后访问 http://localhost:8080 。需要支持 WebGL2 的浏览器；独立显卡上建议在设置里选择“极致”画质（首次运行帧率过低时会自动降档）。
 
-构建静态站点：
-
-```bash
-npm run build
-```
-
-产物在 `dist/`，可以直接部署到任何静态托管。仓库自带 GitHub Pages 工作流（`.github/workflows/pages.yml`），推送到 `main` 后在仓库设置里把 Pages 来源设为 GitHub Actions 即可。
+部署：仓库自带 GitHub Pages 工作流（`.github/workflows/pages.yml`），直接发布仓库根目录。合并到 `main` 后，在仓库 Settings → Pages 把来源设为 GitHub Actions 即可。
 
 ## 目录
 
@@ -110,5 +104,6 @@ src/
   card/cardShader.js   卡面物理着色器
   card/Card.js         卡牌几何（圆角、纸芯侧边、弯曲）与材质
   card/faceTextures.js 官方卡图加载与程序绘制卡面、卡背
-scripts/               物理数值检查与浏览器端到端测试
+data/  hdr/  tex/      卡牌数据、HDR 环境光照、木纹贴图
+vendor/                Three.js、Rapier、字体（含各自许可证）
 ```
